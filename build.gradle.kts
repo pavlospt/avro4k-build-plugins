@@ -21,10 +21,6 @@ allprojects {
     version = project.findProperty("projVersion") ?: "0.0.1-SNAPSHOT"
 }
 
-subprojects {
-
-}
-
 dependencies {
     implementation(kotlin("stdlib"))
 }
