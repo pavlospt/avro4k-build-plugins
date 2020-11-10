@@ -1,5 +1,7 @@
 object GradlePlugins {
+    const val maven = "maven"
     const val mavenPublish = "maven-publish"
+    const val signing = "signing"
     const val javaGradlePlugin = "java-gradle-plugin"
     const val gradlePluginPublisher = "com.gradle.plugin-publish"
     const val kotlinSerialization = "org.jetbrains.kotlin.plugin.serialization"

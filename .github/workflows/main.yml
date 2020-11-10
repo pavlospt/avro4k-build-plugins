@@ -1,0 +1,32 @@
+name: build-main
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'doc/**'
+      - '*.md'
+
+jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout Repo
+#        uses: actions/checkout@v2
+
+  deploy:
+#    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: deploy to sonatype snapshots
+        run: ./gradlew publish
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.configureondemand=true -Dorg.gradle.parallel=false -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxPermSize=2048m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"

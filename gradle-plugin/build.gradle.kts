@@ -1,8 +1,13 @@
+import java.net.URI
+
 plugins {
+    java
     kotlin("jvm")
-    id(GradlePlugins.gradlePluginPublisher).version(Versions.gradlePluginPublish)
-    id(GradlePlugins.javaGradlePlugin)
     id(GradlePlugins.kotlinSerialization).version(Versions.kotlin)
+    id(GradlePlugins.javaGradlePlugin)
+    id(GradlePlugins.gradlePluginPublisher).version(Versions.gradlePluginPublish)
+    id(GradlePlugins.mavenPublish).apply(true)
+    id(GradlePlugins.signing)
 }
 
 repositories {
@@ -12,6 +17,42 @@ repositories {
 
 dependencies {
     implementation(Dependencies.avro4kCore)
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "deploy"
+             url = project.ext["repoUrl"]!! as URI
+            credentials {
+                username = System.getenv("OSSRH_USERNAME") ?: System.getProperty("ossrhUsername")
+                password = System.getenv("OSSRH_PASSWORD") ?: System.getProperty("ossrhPassword")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = project.ext["buildGroupId"]!! as String
+            version = project.ext["releaseVersion"]!! as String
+        }
+    }
+}
+
+tasks.withType<Sign>().configureEach {
+    onlyIf { project.ext["isRelease"]!! as Boolean }
+}
+
+signing {
+    setRequired({project.ext["isRelease"]!! as Boolean})
+
+    val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
+    val signingKey: String? = System.getenv("SIGNING_KEY")
+    val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
+
+    @Suppress("UnstableApiUsage")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+
+    sign(publishing.publications.getByName("maven"))
 }
 
 gradlePlugin{
