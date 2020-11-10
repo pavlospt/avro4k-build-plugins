@@ -51,7 +51,7 @@ signing {
     val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
 
     @Suppress("UnstableApiUsage")
-    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    useInMemoryPgpKeys(signingKey, signingPassword)
 
     sign(publishing.publications.getByName("maven"))
 }
