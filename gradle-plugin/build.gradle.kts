@@ -46,7 +46,6 @@ tasks.withType<Sign>().configureEach {
 signing {
     setRequired({project.ext["isRelease"]!! as Boolean})
 
-    val signingKeyId: String? = System.getenv("SIGNING_KEY_ID")
     val signingKey: String? = System.getenv("SIGNING_KEY")
     val signingPassword: String? = System.getenv("SIGNING_PASSWORD")
 

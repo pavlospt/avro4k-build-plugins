@@ -25,14 +25,29 @@ jobs:
         uses: actions/checkout@v2
 
       - name: deploy to sonatype snapshots
-        run: ./gradlew build publish -Pgradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY}} -Pgradle.publish.secret=${{ secrets.GADLE_PUBLISH_SECRET }}
+        run: ./gradlew build publishMavenPublicationToDeployRepository -Pgradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY}} -Pgradle.publish.secret=${{ secrets.GADLE_PUBLISH_SECRET }}
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
           RELEASE_VERSION: ${{ steps.get_version.outputs.VERSION}}
+  deployGradlePlugin:
+    #    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/v}
 
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: deploy to sonatype snapshots
+        run: ./gradlew build publishPlugins -Pgradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY}} -Pgradle.publish.secret=${{ secrets.GADLE_PUBLISH_SECRET }}
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+          RELEASE_VERSION: ${{ steps.get_version.outputs.VERSION}}
 env:
   GRADLE_OPTS: -Dorg.gradle.configureondemand=true -Dorg.gradle.parallel=false -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx3g -XX:MaxPermSize=2048m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
