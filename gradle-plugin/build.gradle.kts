@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import java.net.URI
 
 plugins {
@@ -19,6 +21,11 @@ dependencies {
     implementation(Dependencies.avro4kCore)
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 publishing {
     repositories {
         maven {
@@ -35,11 +42,39 @@ publishing {
             from(components["java"])
             groupId = project.ext["buildGroupId"]!! as String
             version = project.ext["releaseVersion"]!! as String
+
+            pom {
+                name.set("Avro4k Gradle Plugin")
+                description.set("a gradle plugin to generate Avro schema files from kotlin models")
+                url.set("https://github.com/MagusDevOps/avro4k-build-plugins")
+                licenses {
+                    license {
+                        name.set("MIT")
+                        url.set("https://raw.githubusercontent.com/MagusDevOps/avro4k-build-plugins/main/LICENSE")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("jacobjohansen")
+                        name.set("Jacob Johansen")
+                        email.set("jacobjohansen@MagusDevOps.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:https://github.com/MagusDevOps/avro4k-build-plugins.git")
+                    developerConnection.set("scm:git:ssh://git@github.com:MagusDevOps/avro4k-build-plugins.git")
+                    url.set("https://github.com/MagusDevOps/avro4k-build-plugins")
+                }
+            }
         }
     }
 }
 
 tasks.withType<Sign>().configureEach {
+    onlyIf { project.ext["isRelease"]!! as Boolean }
+}
+
+tasks.withType<Javadoc>().configureEach{
     onlyIf { project.ext["isRelease"]!! as Boolean }
 }
 
