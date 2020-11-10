@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: deploy to sonatype snapshots
-        run: ./gradlew publish
+        run: ./gradlew build publishMavenPublicationToDeployRepository
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
