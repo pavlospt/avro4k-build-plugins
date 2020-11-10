@@ -32,6 +32,7 @@ publishing {
     }
     publications {
         create<MavenPublication>("maven") {
+            from(components["java"])
             groupId = project.ext["buildGroupId"]!! as String
             version = project.ext["releaseVersion"]!! as String
         }

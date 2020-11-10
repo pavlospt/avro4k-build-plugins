@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: deploy to sonatype snapshots
-        run: ./gradlew build publishMavenPublicationToDeployRepository
+        run: ./gradlew build publish -Pgradle.publish.key=${{ secrets.GRADLE_PUBLISH_KEY}} -Pgradle.publish.secret=${{ secrets.GADLE_PUBLISH_SECRET }}
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
