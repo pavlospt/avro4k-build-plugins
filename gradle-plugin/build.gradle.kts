@@ -93,7 +93,7 @@ signing {
 gradlePlugin{
     plugins {
         create("avro4kAvroGeneration") {
-            id = "com.magusdevops.avro4k.gradle-plugin.Avro4KAvroGeneration"
+            id = "com.magusdevops.avro4k.gradle-plugin"
             displayName = "Avro4k Avro Generation"
             description = "Generate Avro Schemas from Avro4k model classes"
             implementationClass = "com.magusdevops.avro4k.gradleplugin.Avro4KAvroGenerationPlugin"
