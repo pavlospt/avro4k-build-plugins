@@ -1,6 +1,7 @@
 pluginManagement {
     repositories {
-        jcenter()
+        mavenLocal()
+        mavenCentral()
         gradlePluginPortal()
     }
 }
@@ -8,3 +9,4 @@ pluginManagement {
 rootProject.name = "avro4k-build-plugins"
 
 include("gradle-plugin")
+include("test-avro4k-schema-gen")

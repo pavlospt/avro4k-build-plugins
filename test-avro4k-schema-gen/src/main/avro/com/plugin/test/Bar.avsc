@@ -1,0 +1,12 @@
+{
+  "type" : "record",
+  "name" : "Bar",
+  "namespace" : "com.plugin.test",
+  "fields" : [ {
+    "name" : "qux",
+    "type" : "string"
+  }, {
+    "name" : "zzzz",
+    "type" : "string"
+  } ]
+}
